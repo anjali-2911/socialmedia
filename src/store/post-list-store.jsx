@@ -1,10 +1,9 @@
 import { createContext, useReducer} from 'react';
 
-
-
 export const PostList = createContext({
     postList: [],
     addPost: () => {},
+    addInitialPosts: () => {},
     deletePost: () => {},
 });
 
@@ -16,18 +15,20 @@ const PostListReducer = (currPostList, action)=> {
     {
         newPostList = currPostList.filter((post) => post.id !== action.payload.postId)
     }
+    else if(action.type === "ADD_INITIAL_POSTS"){
+        newPostList = action.payload.posts;
+    
+    }
     else if(action.type === "ADD_POST"){
         newPostList = [action.payload, ...currPostList];
     }
-
-
-    
+   
     return newPostList;
 }
 
 const PostListProvider = ({children}) => {
 
-    const [postList, dispatchPostList] = useReducer(PostListReducer, DEFAULT_POST_LIST)
+    const [postList, dispatchPostList] = useReducer(PostListReducer, [])
 
     const addPost = (userId, postTitle, postBody,reactions,tags) => {
         console.log("Add Post", userId, postTitle, postBody,reactions,tags);
@@ -44,6 +45,17 @@ const PostListProvider = ({children}) => {
             }
         })
     };
+
+    const addInitialPosts = (posts) => {
+
+        dispatchPostList({
+            type : "ADD_INITIAL_POSTS",
+            payload : {
+                posts: posts,
+            }
+        })
+    };
+
     const deletePost = (postId) => {
         console.log(`"delete", ${postId}`)
 
@@ -55,30 +67,11 @@ const PostListProvider = ({children}) => {
         })
     };
 
-    return <PostList.Provider value= {{postList, addPost, deletePost}}>
+    return <PostList.Provider value= {{postList, addPost, addInitialPosts, deletePost}}>
               {children}
            </PostList.Provider>
 };
 
-const DEFAULT_POST_LIST = [
-    {
-        id: 1,
-        title : "going to study",
-        body : "im learning reactjs with hooks and redux.",
-        reactions : 2,
-        userId : "user-9",
-        tags : ["vacation", "pune", "study"]
-    },
 
-    
-    {
-        id: 2,
-        title : "going to vacation",
-        body : "im learning how to swim. my friend teaching me the steps.",
-        reactions : 5,
-        userId : "user987",
-        tags : ["swimming", "lake", "friends"]
-    }
-]
 
 export default PostListProvider;

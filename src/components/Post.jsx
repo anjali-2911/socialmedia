@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AiFillDelete } from "react-icons/ai";
 import { PostList } from "../store/post-list-store";
+import WelcomeMessage from "./WelcomeMessage";
 
 
 const Post = ({ post }) => {
@@ -10,7 +11,7 @@ const Post = ({ post }) => {
 
   // Check if the post object is valid before accessing its properties
   if (!post) {
-    return <div>Loading...</div>;  // or some other fallback UI
+    return <div><WelcomeMessage/></div>;  // or some other fallback UI
   }
 
   console.log("post here ", post?.title);
@@ -19,7 +20,7 @@ const Post = ({ post }) => {
       <div className="card-body">
         <h5 className="card-title">{post.title || "No Title Available"}</h5>
         
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
         
         onClick={()=> deletePost(post.id )}>
 
@@ -30,9 +31,9 @@ const Post = ({ post }) => {
         <p className="card-text">
           {post.body}
         </p>
-{post.tags.map((tags) => (<span key={tags} class="badge text-bg-primary hashtag">{tags}</span>))}
-<div class="alert alert-success" role="alert">
-  This post has been reacted by {post.reactions}
+{post.tags.map((tags) => (<span key={tags} className="badge text-bg-primary hashtag">{tags}</span>))}
+<div className="alert alert-success" role="alert">
+  This post has been reacted by {post.reactions.likes}
 </div>
 
       </div>

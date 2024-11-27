@@ -29,6 +29,7 @@ const CreatePost = () =>{
 
   }
 
+ 
     return (
 <form className="create-post" onSubmit={handleSubmit}>
 
